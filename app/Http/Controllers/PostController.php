@@ -32,7 +32,26 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'   => 'required|string|max:255',
+            'content' => 'required|string',
+            'picture' => 'nullable|image|max:2048', // Validate that picture is an image
+        ]);
+    
+        $data = $request->only(['title', 'content']);
+    
+        if ($request->hasFile('picture')) {
+            $file = $request->file('picture');
+            // $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            // Store the file in the "public/uploads" directory
+            $path = $file->storeAs('uploads', $filename, 'public');
+            $data['picture'] = '/storage/' . $path;
+        }
+    
+        Post::create($data);
+    
+        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
     }
 
     /**
@@ -56,7 +75,28 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title'   => 'required|string|max:255',
+            'content' => 'required|string',
+            'picture' => 'nullable|image|max:2048', // Validate that picture is an image
+        ]);
+    
+        $data = $request->only(['title', 'content']);
+    
+        if ($request->hasFile('picture')) {
+            $file = $request->file('picture');
+            // $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            // Store the file in the "public/uploads" directory
+            $path = $file->storeAs('uploads', $filename, 'public');
+            $data['picture'] = '/storage/' . $path;
+        }
+
+        // update the post
+        $post->update($data);
+    
+    
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
     }
 
     /**
@@ -64,6 +104,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
 }

@@ -60,10 +60,10 @@ export default function Posts() {
                                     <td className="p-3">{post.title}</td>
                                     <td className="p-3">{post.content}</td>
                                     <td className="flex gap-2 p-3">
-                                        <button onClick={() => openModal(post)} className="rounded bg-blue-300 px-3 py-1 text-sm text-white">
+                                        <button onClick={() => openModal(post)} className="rounded bg-blue-500 px-3 py-1 text-sm text-white">
                                             Edit
                                         </button>
-                                        <button onClick={() => handleDelete(post.id)} className="rounded bg-red-300 px-3 py-1 text-sm text-white">
+                                        <button onClick={() => handleDelete(post.id)} className="rounded bg-red-500 px-3 py-1 text-sm text-white">
                                             Delete
                                         </button>
                                     </td>
