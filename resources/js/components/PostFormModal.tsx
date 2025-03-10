@@ -11,6 +11,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 
+// Post interface
 interface Post {
     id?: number;
     title: string;
@@ -18,6 +19,7 @@ interface Post {
     picture?: string;
 }
 
+// Props - PostFormModal parameters
 interface Props {
     isOpen: boolean;
     closeModal: () => void;
@@ -25,10 +27,12 @@ interface Props {
 }
 
 export default function PostFormModal({ isOpen, closeModal, post }: Props) {
+    // States
     const [formData, setFormData] = useState<Post>({ title: '', content: '', picture: '' });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>('');
 
+    // Effects
     useEffect(() => {
         if (post) {
             setFormData({ title: post.title, content: post.content, picture: post.picture || '' });
@@ -41,10 +45,13 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         }
     }, [post]);
 
+    /*---- Functions ----*/
+    // Handle change for title, content
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Handle change for picture
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
@@ -53,9 +60,11 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         }
     };
 
+    // Handle submit - create or update post
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // form data
         const data = new FormData();
         data.append('title', formData.title);
         data.append('content', formData.content);
@@ -68,7 +77,10 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         // error message
         const errorMessage = post?.id ? 'Failed to update post.' : 'Failed to create post.';
 
+        // if post id exists then update else create
         if (post?.id) {
+            // Update
+            // data.append('id', post.id.toString());
             data.append('_method', 'PUT');
             router.post(`/posts/${post.id}`, data, {
                 onSuccess: () => {
@@ -82,6 +94,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                 },
             });
         } else {
+            // Create
             router.post('/posts', data, {
                 onSuccess: () => {
                     toast.success(successMessage);
@@ -96,6 +109,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
         }
     };
 
+    // Render
     if (!isOpen) return null;
 
     return (

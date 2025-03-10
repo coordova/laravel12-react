@@ -37,7 +37,7 @@ export default function Posts() {
 
             <Toaster position="top-right" richColors />
 
-            <div className="flex flex-col gap-6 rounded-xl bg-white p-6 text-black shadow-lg">
+            <div className="bg-background text-foreground flex flex-col gap-6 rounded-xl p-6 shadow-lg">
                 <div className="flex justify-end">
                     {/* <button onClick={() => openModal()} className="rounded bg-green-600 px-3 py-1 text-sm text-white transition hover:bg-green-700">
                         Add Post
@@ -47,9 +47,9 @@ export default function Posts() {
                     </Button>
                 </div>
 
-                <table className="w-full border-collapse rounded-lg bg-white text-black shadow-sm">
+                <table className="bg-background text-foreground w-full border-collapse rounded-lg shadow-sm">
                     <thead>
-                        <tr className="border-b bg-gray-100 text-gray-800">
+                        <tr className="bg-background text-foreground border-b">
                             {['Picture', 'Title', 'Content', 'Actions'].map((header) => (
                                 <th key={header} className="border p-3 text-left">
                                     {header}
