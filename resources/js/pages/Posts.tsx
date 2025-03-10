@@ -2,6 +2,7 @@ import PostFormModal from '@/components/PostFormModal';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Toaster, toast } from 'sonner';
 
 export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
@@ -17,9 +18,11 @@ export default function Posts() {
     const handleDelete = (id: number) => {
         router.delete(`/posts/${id}`, {
             onSuccess: () => {
+                toast.success('Post deleted successfully.');
                 router.reload();
             },
             onError: () => {
+                toast.error('Failed to delete post.');
                 console.error('Failed to delete post.');
             },
         });
@@ -28,6 +31,8 @@ export default function Posts() {
     return (
         <AppLayout>
             <Head title="Posts" />
+
+            <Toaster position="top-right" richColors />
 
             <div className="flex flex-col gap-6 rounded-xl bg-white p-6 text-black shadow-lg">
                 <div className="flex justify-end">

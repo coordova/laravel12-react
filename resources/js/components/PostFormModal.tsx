@@ -1,6 +1,8 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
+import { toast } from 'sonner';
+
 interface Post {
     id?: number;
     title: string;
@@ -53,24 +55,33 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
             data.append('picture', selectedFile);
         }
 
+        // success message
+        const successMessage = post?.id ? 'Post updated successfully.' : 'Post created successfully.';
+        // error message
+        const errorMessage = post?.id ? 'Failed to update post.' : 'Failed to create post.';
+
         if (post?.id) {
             data.append('_method', 'PUT');
             router.post(`/posts/${post.id}`, data, {
                 onSuccess: () => {
+                    toast.success(successMessage);
                     closeModal();
                     router.reload();
                 },
                 onError: (errors) => {
+                    toast.error(errorMessage);
                     console.error(errors.message || 'Failed to submit post.');
                 },
             });
         } else {
             router.post('/posts', data, {
                 onSuccess: () => {
+                    toast.success(successMessage);
                     closeModal();
                     router.reload();
                 },
                 onError: (errors) => {
+                    toast.error(errorMessage);
                     console.error(errors.message || 'Failed to submit post.');
                 },
             });
