@@ -1,8 +1,11 @@
 import PostFormModal from '@/components/PostFormModal';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
+
+import { Trash2 } from 'lucide-react';
 
 export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
@@ -36,9 +39,12 @@ export default function Posts() {
 
             <div className="flex flex-col gap-6 rounded-xl bg-white p-6 text-black shadow-lg">
                 <div className="flex justify-end">
-                    <button onClick={() => openModal()} className="rounded bg-green-600 px-3 py-1 text-sm text-white transition hover:bg-green-700">
+                    {/* <button onClick={() => openModal()} className="rounded bg-green-600 px-3 py-1 text-sm text-white transition hover:bg-green-700">
                         Add Post
-                    </button>
+                    </button> */}
+                    <Button onClick={() => openModal()} className="ml-2">
+                        Add Post
+                    </Button>
                 </div>
 
                 <table className="w-full border-collapse rounded-lg bg-white text-black shadow-sm">
@@ -65,12 +71,21 @@ export default function Posts() {
                                     <td className="p-3">{post.title}</td>
                                     <td className="p-3">{post.content}</td>
                                     <td className="flex gap-2 p-3">
-                                        <button onClick={() => openModal(post)} className="rounded bg-blue-500 px-3 py-1 text-sm text-white">
+                                        {/* <button onClick={() => openModal(post)} className="rounded bg-blue-500 px-3 py-1 text-sm text-white">
                                             Edit
                                         </button>
                                         <button onClick={() => handleDelete(post.id)} className="rounded bg-red-500 px-3 py-1 text-sm text-white">
                                             Delete
-                                        </button>
+                                        </button> */}
+                                        {/* <Button onClick={() => handleDelete(post.id)} variant="destructive">
+                                            Delete
+                                        </Button> */}
+                                        <Button onClick={() => openModal(post)} variant="outline">
+                                            Edit
+                                        </Button>
+                                        <Button onClick={() => handleDelete(post.id)} variant="outline" size="icon">
+                                            <Trash2 />
+                                        </Button>
                                     </td>
                                 </tr>
                             ))

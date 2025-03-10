@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+
 interface Post {
     id?: number;
     title: string;
@@ -96,7 +101,7 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                 <h2 className="mb-4 text-lg font-semibold">{post ? 'Edit Post' : 'Add Post'}</h2>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className="mb-3">
-                        <label className="block text-sm font-medium">Title</label>
+                        {/* <label className="block text-sm font-medium">Title</label>
                         <input
                             type="text"
                             name="title"
@@ -104,17 +109,21 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                             onChange={handleChange}
                             className="w-full rounded border p-2"
                             required
-                        />
+                        /> */}
+                        <Label htmlFor="title">Title</Label>
+                        <Input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Title" required />
                     </div>
                     <div className="mb-3">
-                        <label className="block text-sm font-medium">Content</label>
+                        {/* <label className="block text-sm font-medium">Content</label>
                         <textarea
                             name="content"
                             value={formData.content}
                             onChange={handleChange}
                             className="w-full rounded border p-2"
                             required
-                        ></textarea>
+                        ></textarea> */}
+                        <Label htmlFor="content">Content</Label>
+                        <Textarea name="content" value={formData.content} onChange={handleChange} placeholder="Content" required />
                     </div>
                     <div className="mb-3">
                         <label className="block text-sm font-medium">Picture (optional)</label>
@@ -127,12 +136,17 @@ export default function PostFormModal({ isOpen, closeModal, post }: Props) {
                         </div>
                     )}
                     <div className="flex justify-end gap-2">
-                        <button type="button" onClick={closeModal} className="rounded bg-gray-500 px-4 py-2 text-white">
+                        {/* <button type="button" onClick={closeModal} className="rounded bg-gray-500 px-4 py-2 text-white">
                             Cancel
                         </button>
                         <button type="submit" className="rounded bg-blue-600 px-4 py-2 text-white">
                             {post ? 'Update' : 'Create'}
-                        </button>
+                        </button> */}
+
+                        <Button variant="secondary" onClick={closeModal}>
+                            Cancel
+                        </Button>
+                        <Button>{post ? 'Update' : 'Create'}</Button>
                     </div>
                 </form>
             </div>
