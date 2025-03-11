@@ -51,8 +51,8 @@ export default function Posts() {
                     <thead>
                         <tr className="bg-background text-foreground border-b">
                             {['Picture', 'Title', 'Content', 'Actions'].map((header) => (
-                                <th key={header} className="border p-3 text-left">
-                                    {header}
+                                <th key={header} className="border p-3 text-center">
+                                    {header.toUpperCase()}
                                 </th>
                             ))}
                         </tr>
@@ -63,7 +63,13 @@ export default function Posts() {
                                 <tr key={post.id} className="border-b">
                                     <td className="p-3">
                                         {post.picture ? (
-                                            <img src={post.picture} alt="Post" className="h-16 w-16 rounded-full object-cover" />
+                                            <img
+                                                src={post.picture}
+                                                alt="Post"
+                                                className="h-16 w-16 cursor-pointer rounded-full object-cover"
+                                                loading="lazy"
+                                                onClick={() => openModal(post)}
+                                            />
                                         ) : (
                                             'No Picture'
                                         )}
