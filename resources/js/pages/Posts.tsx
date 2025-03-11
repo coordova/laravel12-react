@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
 import { Trash2 } from 'lucide-react';
+import { Pagination } from '@/components/ui/pagination';
 
 export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
@@ -104,6 +105,9 @@ export default function Posts() {
                         )}
                     </tbody>
                 </table>
+
+                {/* Pagination */}
+                <Pagination  />
             </div>
 
             <PostFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
