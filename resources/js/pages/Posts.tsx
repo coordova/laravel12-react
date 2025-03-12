@@ -1,12 +1,13 @@
 import PostFormModal from '@/components/PostFormModal';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
+
 import { Trash2 } from 'lucide-react';
-import { Pagination } from '@/components/ui/pagination';
 import {
     Table,
     TableBody,
@@ -15,12 +16,25 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-  } from "@/components/ui/table"
+  } from "@/components/ui/table";
+
+  import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+  } from "@/components/ui/pagination"
+import { log } from 'console';
+  
   
 
 export default function Posts() {
+    
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
-
+// console.log(posts);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
 
@@ -57,7 +71,7 @@ export default function Posts() {
 
                 {/* Table shadcn */}
                 <Table>
-                <TableCaption>A list of your recent posts.</TableCaption>
+                    {/* <TableCaption>A list of your recent posts.</TableCaption> */}
                     <TableHeader>
                         <TableRow>
                         <TableHead className="w-[100px]">Picture</TableHead>
@@ -67,7 +81,7 @@ export default function Posts() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                    {posts.map((post) => (
+                    {posts.data.map((post) => (
                         <TableRow key={post.id}>
                             <TableCell className="font-medium">
                                 {post.picture ? (
@@ -96,6 +110,34 @@ export default function Posts() {
                     ))}
                     </TableBody>
                 </Table>
+
+                {/* Pagination shadcn */}
+                <Pagination>
+                    <PaginationContent>
+                        {posts.links.map((link) => (
+                            link.url ? (
+                                <PaginationItem key={link.label}>
+                                    <Link 
+                                        className={cn(
+                                            buttonVariants({
+                                            variant: link.active ? "outline" : "ghost",
+                                            })
+                                        )} 
+                                        href={link.url}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
+                                </PaginationItem>
+                            ) : (
+                                <PaginationItem key={link.label}>
+                                    <span className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: link.label }} />
+                                </PaginationItem>
+                            )
+                        ))}
+                        
+                        
+                        
+                    </PaginationContent>
+                </Pagination>
 
 
             </div>
