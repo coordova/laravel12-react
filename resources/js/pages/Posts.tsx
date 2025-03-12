@@ -1,4 +1,4 @@
-import PostFormModal from '@/components/PostFormModal';
+import PostFormModal from '@/components/crud/PostFormModal';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import { Toaster, toast } from 'sonner';
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 
-import { Trash2 } from 'lucide-react';
+import { Trash2, Eye, Edit } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -36,11 +36,17 @@ export default function Posts() {
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
 // console.log(posts);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isShowModalOpen, setIsShowModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
 
     const openModal = (post = null) => {
         setSelectedPost(post);
         setIsModalOpen(true);
+    };
+
+    const openShowModal = (post = null) => {
+        setSelectedPost(post);
+        setIsShowModalOpen(true);
     };
 
     const handleDelete = (id: number) => {
@@ -99,8 +105,11 @@ export default function Posts() {
                             <TableCell>{post.title}</TableCell>
                             <TableCell>{post.content}</TableCell>
                             <TableCell className="flex gap-2">
+                                <Button onClick={() => openShowModal(post)} variant="outline">
+                                    <Eye />
+                                </Button>
                                 <Button onClick={() => openModal(post)} variant="outline">
-                                    Edit
+                                    <Edit />
                                 </Button>
                                 <Button onClick={() => handleDelete(post.id)} variant="outline" size="icon">
                                     <Trash2 />
