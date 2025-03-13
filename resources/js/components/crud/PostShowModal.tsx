@@ -20,9 +20,6 @@ interface Props {
 // Components shadcn for modal
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
 import { DialogFooter } from '../ui/dialog';
 
 const Post = ({ isOpen, closeModal, post }: Props) => {
@@ -33,25 +30,17 @@ const Post = ({ isOpen, closeModal, post }: Props) => {
         <Dialog open={isOpen} onOpenChange={closeModal}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Post</DialogTitle>
+                    <DialogTitle>{post?.title}</DialogTitle>
                     <DialogDescription>
-                        View post details
+                        <pre className='text-wrap'>{post?.content}</pre>
                     </DialogDescription>
                 </DialogHeader>
+
                 <div className="mb-3">
-                    <Label htmlFor="title">Title</Label>
-                    <Input type="text" name="title" value={post?.title} readOnly />
-                </div>
-                <div className="mb-3">
-                    <Label htmlFor="content">Content</Label>
-                    <Textarea name="content" value={post?.content} readOnly />
-                </div>
-                <div className="mb-3">
-                    <Label htmlFor="picture">Picture</Label>
                     {post?.picture ? (
-                        <img src={post.picture} alt="Post" className="h-16 w-16 cursor-pointer rounded-full object-cover" loading="lazy" />
+                        <img src={post.picture} alt="Post" className="object-cover" loading="lazy" />
                     ) : (
-                        'No Picture'
+                        <span>No Image</span>
                     )}
                 </div>
                 <DialogFooter>

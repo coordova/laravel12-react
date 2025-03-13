@@ -101,7 +101,9 @@ export default function Posts() {
                                         onClick={() => openShowModal(post)}
                                     />
                                 ) : (
-                                    'No Picture'
+                                    <span className="" onClick={() => openShowModal(post)}>
+                                        <img src="/storage/uploads/no-image-svgrepo-com.svg" alt="No Image" className="bg-background text-foreground h-16 w-16 cursor-pointer rounded-full object-cover" />
+                                    </span>
                                 )}
                             </TableCell>
                             <TableCell>{post.title}</TableCell>
