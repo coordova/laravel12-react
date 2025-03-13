@@ -28,6 +28,7 @@ import {
     PaginationPrevious,
   } from "@/components/ui/pagination"
 import { log } from 'console';
+import PostShowModal from '@/components/crud/PostShowModal';
   
   
 
@@ -80,7 +81,7 @@ export default function Posts() {
                     {/* <TableCaption>A list of your recent posts.</TableCaption> */}
                     <TableHeader>
                         <TableRow>
-                        <TableHead className="w-[100px]">Picture</TableHead>
+                        <TableHead>Picture</TableHead>
                         <TableHead>Title</TableHead>
                         <TableHead>Content</TableHead>
                         <TableHead>Actions</TableHead>
@@ -96,18 +97,22 @@ export default function Posts() {
                                         alt="Post"
                                         className="h-16 w-16 cursor-pointer rounded-full object-cover"
                                         loading="lazy"
-                                        onClick={() => openModal(post)}
+                                        onClick={() => openShowModal(post)}
                                     />
                                 ) : (
                                     'No Picture'
                                 )}
                             </TableCell>
                             <TableCell>{post.title}</TableCell>
-                            <TableCell>{post.content}</TableCell>
+                            <TableCell className="text-wrap">{post.content}</TableCell>
                             <TableCell className="flex gap-2">
-                                <Button onClick={() => openShowModal(post)} variant="outline">
-                                    <Eye />
-                                </Button>
+                                <Link
+                                    href={route('posts.show', post.id)}
+                                >
+                                    <Button variant="outline">
+                                        <Eye />
+                                    </Button>
+                                </Link>
                                 <Button onClick={() => openModal(post)} variant="outline">
                                     <Edit />
                                 </Button>
@@ -150,8 +155,8 @@ export default function Posts() {
 
 
             </div>
-
             <PostFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
+            <PostShowModal isOpen={isShowModalOpen} closeModal={() => setIsShowModalOpen(false)} post={selectedPost} />
         </AppLayout>
     )
 
