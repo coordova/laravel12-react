@@ -83,7 +83,8 @@ export default function Posts() {
                         <TableRow>
                         <TableHead>Picture</TableHead>
                         <TableHead>Title</TableHead>
-                        <TableHead>Content</TableHead>
+                        <TableHead>Created At</TableHead>
+                        <TableHead>Updated At</TableHead>
                         <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -104,7 +105,8 @@ export default function Posts() {
                                 )}
                             </TableCell>
                             <TableCell>{post.title}</TableCell>
-                            <TableCell className="text-wrap">{post.content}</TableCell>
+                            <TableCell className="">{post.created_at}</TableCell>
+                            <TableCell className="">{post.updated_at}</TableCell>
                             <TableCell className="flex gap-2">
                                 <Link
                                     href={route('posts.show', post.id)}
