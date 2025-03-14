@@ -1,6 +1,6 @@
-import React from 'react'
-import { Head } from '@inertiajs/react'
-import AppLayout from '@/layouts/app-layout'
+// import React from 'react'
+// import { Head } from '@inertiajs/react'
+// import AppLayout from '@/layouts/app-layout'
 
 // Post interface
 interface Post {

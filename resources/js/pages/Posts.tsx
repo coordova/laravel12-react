@@ -40,16 +40,19 @@ export default function Posts() {
     const [isShowModalOpen, setIsShowModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
 
+    // Open modal
     const openModal = (post = null) => {
         setSelectedPost(post);
         setIsModalOpen(true);
     };
 
+    // Open show modal
     const openShowModal = (post = null) => {
         setSelectedPost(post);
         setIsShowModalOpen(true);
     };
 
+    // Handle delete
     const handleDelete = (id: number) => {
         router.delete(`/posts/${id}`, {
             onSuccess: () => {
@@ -92,6 +95,7 @@ export default function Posts() {
                     {posts.data.map((post) => (
                         <TableRow key={post.id}>
                             <TableCell className="font-medium">
+                                {/* Image & No Image */}
                                 {post.picture ? (
                                     <img
                                         src={post.picture}
@@ -159,7 +163,9 @@ export default function Posts() {
 
 
             </div>
+            {/* Modal */}
             <PostFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
+            {/* Show Modal */}
             <PostShowModal isOpen={isShowModalOpen} closeModal={() => setIsShowModalOpen(false)} post={selectedPost} />
         </AppLayout>
     )

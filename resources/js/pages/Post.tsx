@@ -28,9 +28,11 @@ const Post = ({ isOpen, closeModal, post }: Props) => {
             {post && (
                 <div className="flex flex-col items-center gap-6 p-7 md:flex-row md:gap-8 rounded-2xl md:items-start lg:gap-10">
                     <div className='md:w-2/5'>
+                        {/* Image */}
                         {post.picture && (
                             <img src={post.picture} alt="Post" className="sm:w-full md:size-64 md:shadow-xl md:rounded-md object-cover lg:size-80 xl:size-96 " loading="lazy" />
                         )}
+                        {/* No Image */}
                         {!post.picture && (
                             <img src="/storage/uploads/no-image-svgrepo-com.svg" alt="No Image" className="bg-background text-foreground size-64 cursor-pointer rounded-full object-cover" />
                         )}
