@@ -1,11 +1,13 @@
 import PostFormModal from '@/components/crud/PostFormModal';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+import { type Post } from '@/types';
 
 import {
     Table,
@@ -27,8 +29,8 @@ import {
 
 import PostShowModal from '@/components/crud/PostShowModal';
 
-export default function Posts() {
-    const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
+export default function Posts({ posts }: { posts: Post[] }) {
+    // const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
     // console.log(posts);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isShowModalOpen, setIsShowModalOpen] = useState(false);

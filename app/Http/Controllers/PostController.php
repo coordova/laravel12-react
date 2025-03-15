@@ -14,11 +14,14 @@ class PostController extends Controller
      */
     public function index(): Response
     {
-        // $posts = Post::latest()->simplePaginate(3);
-        // $posts = Post::latest()->paginate(3);
+        // $posts = Post::latest()->simplePaginate(4);
+        $posts = Post::latest()->paginate(4);
+        // $links = $posts->links();
         // dd($posts->links());
         return Inertia::render('Posts', [
-            'posts' => Post::latest()->paginate(4)
+            'posts' => $posts,
+            // 'links' => $posts->links(),
+            // 'posts' => Post::latest()->paginate(4)
             // 'posts' => Post::all(),
         ]);
     }
