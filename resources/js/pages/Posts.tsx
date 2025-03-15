@@ -4,38 +4,32 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-import { Trash2, Eye, Edit } from 'lucide-react';
 import {
     Table,
     TableBody,
-    TableCaption,
+    // TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-  } from "@/components/ui/table";
+} from '@/components/ui/table';
+import { Edit, Eye, Trash2 } from 'lucide-react';
 
-  import {
+import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
+    // PaginationEllipsis,
     PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
-import { log } from 'console';
+} from '@/components/ui/pagination';
+
 import PostShowModal from '@/components/crud/PostShowModal';
-  
-  
 
 export default function Posts() {
-    
     const { posts } = usePage<{ posts: { id: number; title: string; content: string; picture?: string }[] }>().props;
-// console.log(posts);
+    // console.log(posts);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isShowModalOpen, setIsShowModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -84,67 +78,69 @@ export default function Posts() {
                     {/* <TableCaption>A list of your recent posts.</TableCaption> */}
                     <TableHeader>
                         <TableRow>
-                        <TableHead>Picture</TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Created At</TableHead>
-                        <TableHead>Updated At</TableHead>
-                        <TableHead>Actions</TableHead>
+                            <TableHead>Picture</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Created At</TableHead>
+                            <TableHead>Updated At</TableHead>
+                            <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                    {posts.data.map((post) => (
-                        <TableRow key={post.id}>
-                            <TableCell className="font-medium">
-                                {/* Image & No Image */}
-                                {post.picture ? (
-                                    <img
-                                        src={post.picture}
-                                        alt="Post"
-                                        className="h-16 w-16 cursor-pointer rounded-full object-cover"
-                                        loading="lazy"
-                                        onClick={() => openShowModal(post)}
-                                    />
-                                ) : (
-                                    <span className="" onClick={() => openShowModal(post)}>
-                                        <img src="/storage/uploads/no-image-svgrepo-com.svg" alt="No Image" className="bg-background text-foreground h-16 w-16 cursor-pointer rounded-full object-cover" />
-                                    </span>
-                                )}
-                            </TableCell>
-                            <TableCell>{post.title}</TableCell>
-                            <TableCell className="">{post.created_at}</TableCell>
-                            <TableCell className="">{post.updated_at}</TableCell>
-                            <TableCell className="flex gap-2">
-                                <Link
-                                    href={route('posts.show', post.id)}
-                                >
-                                    <Button variant="outline">
-                                        <Eye />
+                        {posts.data.map((post) => (
+                            <TableRow key={post.id}>
+                                <TableCell className="font-medium">
+                                    {/* Image & No Image */}
+                                    {post.picture ? (
+                                        <img
+                                            src={post.picture}
+                                            alt="Post"
+                                            className="h-16 w-16 cursor-pointer rounded-full object-cover"
+                                            loading="lazy"
+                                            onClick={() => openShowModal(post)}
+                                        />
+                                    ) : (
+                                        <span className="" onClick={() => openShowModal(post)}>
+                                            <img
+                                                src="/storage/uploads/no-image-svgrepo-com.svg"
+                                                alt="No Image"
+                                                className="bg-background text-foreground h-16 w-16 cursor-pointer rounded-full object-cover"
+                                            />
+                                        </span>
+                                    )}
+                                </TableCell>
+                                <TableCell>{post.title}</TableCell>
+                                <TableCell className="">{post.created_at}</TableCell>
+                                <TableCell className="">{post.updated_at}</TableCell>
+                                <TableCell className="flex gap-2">
+                                    <Link href={route('posts.show', post.id)}>
+                                        <Button variant="outline">
+                                            <Eye />
+                                        </Button>
+                                    </Link>
+                                    <Button onClick={() => openModal(post)} variant="outline">
+                                        <Edit />
                                     </Button>
-                                </Link>
-                                <Button onClick={() => openModal(post)} variant="outline">
-                                    <Edit />
-                                </Button>
-                                <Button onClick={() => handleDelete(post.id)} variant="outline" size="icon">
-                                    <Trash2 />
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                                    <Button onClick={() => handleDelete(post.id)} variant="outline" size="icon">
+                                        <Trash2 />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
 
                 {/* Pagination shadcn */}
                 <Pagination>
                     <PaginationContent>
-                        {posts.links.map((link) => (
+                        {posts.links.map((link) =>
                             link.url ? (
                                 <PaginationItem key={link.label}>
-                                    <Link 
+                                    <Link
                                         className={cn(
                                             buttonVariants({
-                                            variant: link.active ? "outline" : "ghost",
-                                            })
-                                        )} 
+                                                variant: link.active ? 'outline' : 'ghost',
+                                            }),
+                                        )}
                                         href={link.url}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />
@@ -153,22 +149,17 @@ export default function Posts() {
                                 <PaginationItem key={link.label}>
                                     <span className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: link.label }} />
                                 </PaginationItem>
-                            )
-                        ))}
-                        
-                        
-                        
+                            ),
+                        )}
                     </PaginationContent>
                 </Pagination>
-
-
             </div>
             {/* Modal */}
             <PostFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} post={selectedPost} />
             {/* Show Modal */}
             <PostShowModal isOpen={isShowModalOpen} closeModal={() => setIsShowModalOpen(false)} post={selectedPost} />
         </AppLayout>
-    )
+    );
 
     // return (
     //     <AppLayout>
