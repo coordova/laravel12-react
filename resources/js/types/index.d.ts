@@ -42,8 +42,61 @@ export interface User {
 }
 
 export interface Post {
+    data: {
+        id?: number;
+        title: string;
+        content: string;
+        picture?: string;
+    }[];
+    links: {
+        first: string;
+        last: string;
+        prev: string | null;
+        next: string | null;
+    };
+    meta: {
+        current_page: number;
+        from: number;
+        last_page: number;
+        links: {
+            url: string | null;
+            label: string;
+            active: boolean;
+        }[];
+        path: string;
+        per_page: number;
+        to: number;
+        total: number;
+    };
+}
+
+/* export interface Post {
+    data: PostData[];
+    links: {
+        first: string;
+        last: string;
+        prev: string | null;
+        next: string | null;
+    };
+    meta: {
+        current_page: number;
+        from: number;
+        last_page: number;
+        links: {
+            url: string | null;
+            label: string;
+            active: boolean;
+        }[];
+        path: string;
+        per_page: number;
+        to: number;
+        total: number;
+    };
+}
+
+export interface PostData {
     id?: number;
     title: string;
     content: string;
     picture?: string;
-}
+} */
