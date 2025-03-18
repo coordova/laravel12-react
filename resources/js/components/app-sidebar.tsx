@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         url: '/posts',
         icon: FileText,
     },
+    {
+        title: 'Payments',
+        url: '/payments',
+        icon: FileText,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
