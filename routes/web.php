@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -13,6 +14,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::resource('payments', PaymentController::class);
 });
 
 Route::resource('posts', PostController::class);
