@@ -15,7 +15,8 @@ class PaymentController extends Controller
     public function index()
     {
         return Inertia::render('Payments', [
-            'payments' => Payment::latest()->paginate(4)
+            // 'payments' => Payment::latest()->paginate(4)
+            'payments' => Payment::all()
         ]);
     }
 
