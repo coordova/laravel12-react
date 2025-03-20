@@ -44,6 +44,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
   // const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>({})
   const table = useReactTable({
     data,
@@ -55,15 +56,17 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
     },
   })
 
   return (
-    <div>
+    <div className="container mx-auto">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
@@ -101,7 +104,12 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        
       </div>
+      <div className="flex-1 text-sm text-muted-foreground pb-4">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
