@@ -15,7 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('payments', PaymentController::class);
+    Route::resource('payments', PaymentController::class)->only([
+        'index', /* 'create', 'store', 'edit', 'update', */ 'destroy'
+    ]);
 });
 
 Route::resource('posts', PostController::class);

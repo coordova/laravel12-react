@@ -65,6 +65,7 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
-        //
+        $payment->delete();
+        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 }
