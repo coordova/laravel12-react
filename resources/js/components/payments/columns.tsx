@@ -6,6 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { router } from "@inertiajs/react"
+import { toast } from "sonner"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,6 +16,22 @@ export type Payment = {
   amount: number
   status: "pending" | "processing" | "success" | "failed"
   email: string
+}
+
+// handle delete
+const handleDelete = (id: string) => {
+  router.delete(`/payments/${id}`, {
+    preserveScroll: true,
+    // preserveState: true,
+    onSuccess: () => {
+      toast.success('Payment deleted successfully.');
+      router.reload();
+    },
+    onError: () => {
+      toast.error('Failed to delete payment.');
+      console.error('Failed to delete payment.');
+    },
+  });
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -86,13 +104,14 @@ export const columns: ColumnDef<Payment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => confirm('Are you sure you want to delete this payment?') && handleDelete(payment.id)}
+            >
+              Delete
+            </DropdownMenuItem>
+            {/* 
+            <DropdownMenuItem>View customer</DropdownMenuItem> */}
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
