@@ -9,9 +9,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
+// import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
-import { Select } from '@radix-ui/react-select';
+// import { Select } from '@radix-ui/react-select';
 
 // modal interface
 interface EditPaymentModalProps {
@@ -63,7 +63,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
             setLoading(false);
             return;
         }
-        // try
+        // async function
         try {
             const response = await fetch(`/payments/${formData.id}`, {
                 method: 'PUT',
@@ -123,7 +123,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
+        <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit Payment</DialogTitle>
@@ -143,6 +143,10 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                             <Input type="number" name="amount" value={formData.amount} onChange={handleChange} placeholder='Enter amount' required />
                         </div>
                         <div>
+                            <Label htmlFor="email">Email</Label>
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder='Enter email' required />
+                        </div>
+                        <div>
                             <Label htmlFor="status">Status</Label>
                             {/* <Input type="text" name="status" value={formData.status} onChange={handleChange} placeholder='Enter status' required /> */}
                             {/* <Select
@@ -160,18 +164,17 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                                 <option value="completed">Completed</option>
                                 <option value="failed">Failed</option>
                             </select>
-                        </div>
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder='Enter email' required />
+
                         </div>
                     </div>
-                    <div className="flex justify-end gap-2">
-                        <Button type="button" onClick={handleClose}>Cancel</Button>
+                    <DialogFooter>
+                        <Button type="button" onClick={onClose}>Cancel</Button>
                         <Button type="submit" disabled={loading} className="bg-primary text-white">{loading ? 'Saving...' : 'Save'}</Button>
-                    </div>
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>
     );
-}
+};
+
+export default EditPaymentModal;
