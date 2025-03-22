@@ -34,7 +34,11 @@ const handleDelete = (id: string) => {
   });
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns = (
+  setIsModalOpen: (open: boolean) => void,
+  setEditModalOpen: (open: boolean) => void,
+  setSelectedPayment: (payment: Payment | null) => void
+): ColumnDef<Payment>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -109,6 +113,11 @@ export const columns: ColumnDef<Payment>[] = [
               onClick={() => confirm('Are you sure you want to delete this payment?') && handleDelete(payment.id)}
             >
               Delete
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {confirm('Are you sure you want to edit this payment?') && setSelectedPayment(payment); setEditModalOpen(true)}}
+            >
+              Edit
             </DropdownMenuItem>
             {/* 
             <DropdownMenuItem>View customer</DropdownMenuItem> */}
