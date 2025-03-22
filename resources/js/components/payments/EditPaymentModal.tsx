@@ -11,6 +11,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
+import { Select } from '@radix-ui/react-select';
 
 // modal interface
 interface EditPaymentModalProps {
@@ -43,5 +44,134 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
     // handle change
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData(prev => ({
+            ...prev,
+            [name]: name === 'amount' ? parseFloat(value) : value
+        }));
     };
+
+    // handle submit
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setMessage(null);
+        // csrf token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            toast.error('CSRF token not found');
+            setMessage({ type: 'error', text: 'CSRF token not found!, Refresh the page' });
+            setLoading(false);
+            return;
+        }
+        // try
+        try {
+            const response = await fetch(`/payments/${formData.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                toast.error(errorData.message || 'Failed to update payment');
+                setMessage({ type: 'error', text: errorData.message || 'Failed to update payment' });
+                setLoading(false);
+                setTimeout(() => {
+                    onClose();
+                    window.location.reload();
+                    setMessage(null);
+                }, 3000);
+                // throw new Error(errorData.message || 'Failed to update payment');
+            }
+            const data = await response.json();
+            toast.success('Payment updated successfully');
+            setMessage({ type: 'success', text: 'Payment updated successfully' });
+            onClose();
+            onUpdate(data);
+            setLoading(false);
+        } catch (error) {
+            toast.error('Failed to update payment');
+            console.error("Error updating payment:", error);
+            setMessage({ type: 'error', text: 'Failed to update payment' });
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+        // form data
+        /* const data = new FormData();
+        data.append('id', formData.id);
+        data.append('amount', formData.amount.toString());
+        data.append('status', formData.status);
+        data.append('email', formData.email);
+        router.post(`/payments/${formData.id}`, data, {
+            onSuccess: () => {
+                toast.success('Payment updated successfully');
+                onClose();
+                onUpdate(formData);
+                setLoading(false);
+            },
+            onError: (errors) => {
+                toast.error('Failed to update payment');
+                console.error(errors.message || 'Failed to update payment');
+                setLoading(false);
+            }
+        }); */
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={handleClose}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Payment</DialogTitle>
+                    <DialogDescription>
+                        Edit payment details
+                    </DialogDescription>
+                </DialogHeader>
+                <form action="" onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {message && (
+                            <div className={`text-${message.type === 'success' ? 'green' : 'red'}`}>
+                                {message.text}
+                            </div>
+                        )}
+                        <div>
+                            <Label htmlFor="amount">Amount</Label>
+                            <Input type="number" name="amount" value={formData.amount} onChange={handleChange} placeholder='Enter amount' required />
+                        </div>
+                        <div>
+                            <Label htmlFor="status">Status</Label>
+                            {/* <Input type="text" name="status" value={formData.status} onChange={handleChange} placeholder='Enter status' required /> */}
+                            {/* <Select
+                                name="status"
+                                value={formData.status}
+                                onChange={handleChange}
+                                options={[
+                                    { value: 'pending', label: 'Pending' },
+                                    { value: 'completed', label: 'Completed' },
+                                    { value: 'failed', label: 'Failed' },
+                                ]}
+                            /> */}
+                            <select name="status" value={formData.status} onChange={handleChange} required>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <Label htmlFor="email">Email</Label>
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder='Enter email' required />
+                        </div>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <Button type="button" onClick={handleClose}>Cancel</Button>
+                        <Button type="submit" disabled={loading} className="bg-primary text-white">{loading ? 'Saving...' : 'Save'}</Button>
+                    </div>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+}
