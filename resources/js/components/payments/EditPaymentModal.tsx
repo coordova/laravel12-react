@@ -6,9 +6,9 @@ import { toast } from 'sonner';
 
 // Components shadcn for modal
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 // import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
 // import { Select } from '@radix-ui/react-select';
@@ -22,12 +22,12 @@ interface EditPaymentModalProps {
 }
 
 // Payment interface
-interface Payment {
+/* interface Payment {
     id: string;
     amount: number;
     status: "pending" | "processing" | "success" | "failed";
     email: string;
-}
+} */
 
 const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, payment, onUpdate }) => {
     const [formData, setFormData] = useState<Payment>({ id: '', amount: 0, status: 'pending', email: '' });
@@ -51,7 +51,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
     };
 
     // handle submit
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setMessage(null);

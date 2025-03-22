@@ -57,7 +57,15 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
-        //
+        $request->validate([
+            'amount' => 'required|numeric',
+            'status' => 'required|in:pending,success,failed,processing',
+            'email' => 'required|email',
+        ]);
+
+        $payment->update($request->all());
+        // return redirect()->route('payments.index')->with('success', 'Payment updated successfully...');
+        return redirect()->json(['message' => 'Payment updated successfully...'], 200);
     }
 
     /**
