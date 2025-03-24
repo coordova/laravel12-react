@@ -11,7 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 // import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
-// import { Select } from '@radix-ui/react-select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+  
 
 // modal interface
 interface EditPaymentModalProps {
@@ -140,7 +147,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                         )}
                         <div>
                             <Label htmlFor="amount">Amount</Label>
-                            <Input type="number" name="amount" value={formData.amount} onChange={handleChange} placeholder='Enter amount' required />
+                            <Input /* type="number" */ name="amount" value={formData.amount} onChange={handleChange} placeholder='Enter amount' required />
                         </div>
                         <div>
                             <Label htmlFor="email">Email</Label>
@@ -148,7 +155,18 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                         </div>
                         <div>
                             <Label htmlFor="status">Status</Label>
-                            {/* <Input type="text" name="status" value={formData.status} onChange={handleChange} placeholder='Enter status' required /> */}
+                            <Select name="status" value={formData.status} onValueChange={value => handleChange({ target: { name: 'status', value } })}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="processing">Processing</SelectItem>
+                                    <SelectItem value="success">Success</SelectItem>
+                                    <SelectItem value="failed">Failed</SelectItem>
+                                </SelectContent>
+                            </Select>
+
                             {/* <Select
                                 name="status"
                                 value={formData.status}
@@ -159,11 +177,11 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                                     { value: 'failed', label: 'Failed' },
                                 ]}
                             /> */}
-                            <select name="status" value={formData.status} onChange={handleChange} required>
+                            {/* <select name="status" value={formData.status} onChange={handleChange} required>
                                 <option value="pending">Pending</option>
                                 <option value="completed">Completed</option>
                                 <option value="failed">Failed</option>
-                            </select>
+                            </select> */}
 
                         </div>
                     </div>

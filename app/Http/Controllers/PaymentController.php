@@ -59,7 +59,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric',
-            'status' => 'required|in:pending,success,failed,processing',
+            'status' => 'required|in:pending,processing,success,failed',
             'email' => 'required|email',
         ]);
 

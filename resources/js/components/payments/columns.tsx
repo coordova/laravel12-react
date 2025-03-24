@@ -115,7 +115,7 @@ export const columns = (
               Delete
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => {confirm('Are you sure you want to edit this payment?') && setSelectedPayment(payment); setEditModalOpen(true)}}
+              onClick={() => {/* confirm('Are you sure you want to edit this payment?') && */ setSelectedPayment(payment); setEditModalOpen(true)}}
             >
               Edit
             </DropdownMenuItem>
