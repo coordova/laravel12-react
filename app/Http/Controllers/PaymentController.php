@@ -16,7 +16,7 @@ class PaymentController extends Controller
     {
         return Inertia::render('Payments', [
             // 'payments' => Payment::latest()->paginate(4)
-            'payments' => Payment::all()
+            'payments' => Payment::orderBy('created_at', 'desc')->get()
         ]);
     }
 
@@ -33,7 +33,17 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate the request data
+        $request->validate([
+            'amount' => 'required|numeric|gt:0',
+            'status' => 'required|in:pending,processing,success,failed',
+            'email' => 'required|email|unique:payments,email',
+        ]);
+
+        // create the payment
+        Payment::create($request->all());
+        // return redirect()->route('payments.index')->with('success', 'Payment created successfully...');
+        return response()->json(['message' => 'Payment created successfully...'], 200);
     }
 
     /**

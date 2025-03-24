@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('payments', PaymentController::class)->only([
-        'index', /* 'create', 'store', 'edit', */ 'update', 'destroy'
+        'index', /* 'create', */ 'store', 'edit', 'update', 'destroy'
     ]);
 });
 

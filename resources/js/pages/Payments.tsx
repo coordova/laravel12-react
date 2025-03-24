@@ -1,13 +1,14 @@
-import AppLayout from '@/layouts/app-layout'
-import React, { useEffect, useState } from 'react' 
-import { Head } from '@inertiajs/react'
-import { Toaster } from 'sonner'
+import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { Toaster } from 'sonner';
 
-import { Payment, columns } from "@/components/payments/columns"
-import { DataTable } from "@/components/payments/data-table"
+import { Payment, columns } from '@/components/payments/columns';
+import { DataTable } from '@/components/payments/data-table';
 
-import EditPaymentModal from "@/components/payments/EditPaymentModal"
+import AddPaymentModal from '@/components/payments/AddPaymentModal';
+import EditPaymentModal from '@/components/payments/EditPaymentModal';
 
 // breadcrumbs
 const breadcrumbs: BreadcrumbItem[] = [
@@ -17,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const Payments = ( { payments }: { payments: Payment[] } ) => {
+const Payments = ({ payments }: { payments: Payment[] }) => {
     const [data, setData] = useState<Payment[]>(payments);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -28,7 +29,7 @@ const Payments = ( { payments }: { payments: Payment[] } ) => {
     }, [payments]);
 
     const handleUpdate = (payment: Payment) => {
-        setData((prev) => prev.map(p => p.id === payment.id ? payment : p));
+        setData((prev) => prev.map((p) => (p.id === payment.id ? payment : p)));
         setEditModalOpen(true);
         setSelectedPayment(payment);
     };
@@ -42,10 +43,11 @@ const Payments = ( { payments }: { payments: Payment[] } ) => {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Payments" />
             <Toaster position="top-right" richColors />
-            <DataTable columns={columns( () => {}, setEditModalOpen, setSelectedPayment)} data={ payments} />
+            <DataTable columns={columns(() => {}, setEditModalOpen, setSelectedPayment)} data={payments} />
             <EditPaymentModal isOpen={editModalOpen} onClose={handleEditClose} payment={selectedPayment} onUpdate={handleUpdate} />
+            <AddPaymentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </AppLayout>
-    )
-}
+    );
+};
 
-export default Payments
+export default Payments;
