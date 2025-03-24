@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
 
 const AddPaymentModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
@@ -72,10 +73,22 @@ const AddPaymentModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
                     )}
                     <Input type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     <Input type="number" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full rounded border p-2" required>
+                    {/* <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full rounded border p-2" required>
                         <option value="">Select status</option> <option value="processing">Processing</option>{' '}
                         <option value="pending">Pending</option> <option value="success">Success</option> <option value="failed">Failed</option>{' '}
-                    </select>{' '}
+                    </select>{' '} */}
+                    {/* select */}
+                    <Select name="status" value={status} onValueChange={(value) => setStatus(value)}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="processing">Processing</SelectItem>
+                            <SelectItem value="success">Success</SelectItem>
+                            <SelectItem value="failed">Failed</SelectItem>
+                        </SelectContent>
+                    </Select>
                     <DialogFooter>
                         <Button variant="outline" type="button" onClick={onClose} disabled={loading}>
                             Cancel{' '}

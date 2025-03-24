@@ -133,7 +133,12 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                         </div>
                         <div>
                             <Label htmlFor="status">Status</Label>
-
+                            {/* <select name="status" value={formData.status} onChange={handleChange} className="w-full rounded border p-2" required>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="success">Success</option>
+                                <option value="failed">Failed</option>
+                            </select> */}
                             <Select
                                 name="status"
                                 value={formData.status}

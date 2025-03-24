@@ -64,6 +64,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                 />
                 {/* Add new payment */}
                 <Button
+                    variant="outline"
                     onClick={() => {
                         setIsModelOpen(true);
                     }}
