@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 // import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // modal interface
 interface EditPaymentModalProps {
@@ -91,29 +92,10 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                 toast.error(errorData.message || 'Failed to update payment');
                 setMessage({ type: 'error', text: errorData.message || 'Failed to update payment' });
                 setLoading(false);
-                /* setTimeout(() => {
-                    setMessage(null);
-                }, 3000); */
-            }
-
-            /* if (!response.ok) {
-                const errorData = await response.json();
-                toast.error(errorData.message || 'Failed to update payment');
-                setMessage({ type: 'error', text: errorData.message || 'Failed to update payment' });
-                setLoading(false);
                 setTimeout(() => {
-                    onClose();
-                    // window.location.reload();
                     setMessage(null);
                 }, 3000);
-                // throw new Error(errorData.message || 'Failed to update payment');
             }
-            const data = await response.json();
-            toast.success('Payment updated successfully');
-            setMessage({ type: 'success', text: 'Payment updated successfully' });
-            onClose();
-            onUpdate(data);
-            setLoading(false); */
         } catch (error) {
             toast.error('Failed to update payment');
             console.error('Error updating payment:', error);
@@ -151,13 +133,17 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                         </div>
                         <div>
                             <Label htmlFor="status">Status</Label>
-                            <select name="status" value={formData.status} onChange={handleChange} className="w-full rounded border p-2" required>
+                            {/* <select name="status" value={formData.status} onChange={handleChange} className="w-full rounded border p-2" required>
                                 <option value="pending">Pending</option>
                                 <option value="processing">Processing</option>
                                 <option value="success">Success</option>
                                 <option value="failed">Failed</option>
-                            </select>
-                            {/* <Select name="status" value={formData.status} onValueChange={value => handleChange({ target: { name: 'status', value } })}>
+                            </select> */}
+                            <Select
+                                name="status"
+                                value={formData.status}
+                                onValueChange={(value) => handleChange({ target: { name: 'status', value } })}
+                            >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
@@ -167,7 +153,7 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                                     <SelectItem value="success">Success</SelectItem>
                                     <SelectItem value="failed">Failed</SelectItem>
                                 </SelectContent>
-                            </Select> */}
+                            </Select>
 
                             {/* <Select
                                 name="status"
