@@ -1,24 +1,15 @@
-import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 // Shadcn for toast
 import { toast } from 'sonner';
 
 // Components shadcn for modal
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 // import { Textarea } from '../ui/textarea';
 import { Payment } from '@/components/payments/columns';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
 
 // modal interface
 interface EditPaymentModalProps {
@@ -51,14 +42,15 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
     // handle change
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: name === 'amount' ? parseFloat(value) : value
+            [name]: name === 'amount' ? parseFloat(value) : value,
         }));
     };
 
     // handle submit
     const handleSubmit = async (e: React.FormEvent) => {
+        console.log(formData);
         e.preventDefault();
         setLoading(true);
         setMessage(null);
@@ -76,20 +68,42 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
-            if (!response.ok) {
+
+            if (response.ok) {
+                const data = await response.json(); // parse response body - updated payment data
+                toast.success('Payment updated successfully');
+                setMessage({ type: 'success', text: 'Payment updated successfully' });
+                onUpdate(data);
+                setLoading(false);
+                setTimeout(() => {
+                    onClose();
+                    setMessage(null);
+                    window.location.reload();
+                }, 3000);
+            } else {
+                const errorData = await response.json(); // parse response body - error data
+                toast.error(errorData.message || 'Failed to update payment');
+                setMessage({ type: 'error', text: errorData.message || 'Failed to update payment' });
+                setLoading(false);
+                /* setTimeout(() => {
+                    setMessage(null);
+                }, 3000); */
+            }
+
+            /* if (!response.ok) {
                 const errorData = await response.json();
                 toast.error(errorData.message || 'Failed to update payment');
                 setMessage({ type: 'error', text: errorData.message || 'Failed to update payment' });
                 setLoading(false);
                 setTimeout(() => {
                     onClose();
-                    window.location.reload();
+                    // window.location.reload();
                     setMessage(null);
                 }, 3000);
                 // throw new Error(errorData.message || 'Failed to update payment');
@@ -99,34 +113,15 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
             setMessage({ type: 'success', text: 'Payment updated successfully' });
             onClose();
             onUpdate(data);
-            setLoading(false);
+            setLoading(false); */
         } catch (error) {
             toast.error('Failed to update payment');
-            console.error("Error updating payment:", error);
+            console.error('Error updating payment:', error);
             setMessage({ type: 'error', text: 'Failed to update payment' });
             setLoading(false);
         } finally {
             setLoading(false);
         }
-        // form data
-        /* const data = new FormData();
-        data.append('id', formData.id);
-        data.append('amount', formData.amount.toString());
-        data.append('status', formData.status);
-        data.append('email', formData.email);
-        router.post(`/payments/${formData.id}`, data, {
-            onSuccess: () => {
-                toast.success('Payment updated successfully');
-                onClose();
-                onUpdate(formData);
-                setLoading(false);
-            },
-            onError: (errors) => {
-                toast.error('Failed to update payment');
-                console.error(errors.message || 'Failed to update payment');
-                setLoading(false);
-            }
-        }); */
     };
 
     return (
@@ -135,27 +130,34 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                 <DialogHeader>
                     <DialogTitle>Edit Payment</DialogTitle>
                     <DialogDescription>
-                        Edit payment details
+                        {message && <div className={`text-${message.type === 'success' ? 'green-600' : 'red-600'}`}>{message.text}</div>}
                     </DialogDescription>
                 </DialogHeader>
                 <form action="" onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {message && (
-                            <div className={`text-${message.type === 'success' ? 'green' : 'red'}`}>
-                                {message.text}
-                            </div>
-                        )}
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <Label htmlFor="amount">Amount</Label>
-                            <Input /* type="number" */ name="amount" value={formData.amount} onChange={handleChange} placeholder='Enter amount' required />
+                            <Input
+                                /* type="number" */ name="amount"
+                                value={formData.amount}
+                                onChange={handleChange}
+                                placeholder="Enter amount"
+                                required
+                            />
                         </div>
                         <div>
                             <Label htmlFor="email">Email</Label>
-                            <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder='Enter email' required />
+                            <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email" required />
                         </div>
                         <div>
                             <Label htmlFor="status">Status</Label>
-                            <Select name="status" value={formData.status} onValueChange={value => handleChange({ target: { name: 'status', value } })}>
+                            <select name="status" value={formData.status} onChange={handleChange} className="w-full rounded border p-2" required>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="success">Success</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                            {/* <Select name="status" value={formData.status} onValueChange={value => handleChange({ target: { name: 'status', value } })}>
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Status" />
                                 </SelectTrigger>
@@ -165,15 +167,16 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                                     <SelectItem value="success">Success</SelectItem>
                                     <SelectItem value="failed">Failed</SelectItem>
                                 </SelectContent>
-                            </Select>
+                            </Select> */}
 
                             {/* <Select
                                 name="status"
                                 value={formData.status}
-                                onChange={handleChange}
+                                onValueChange={handleChange}
                                 options={[
                                     { value: 'pending', label: 'Pending' },
-                                    { value: 'completed', label: 'Completed' },
+                                    { value: 'processing', label: 'Processing' },
+                                    { value: 'success', label: 'Success' },
                                     { value: 'failed', label: 'Failed' },
                                 ]}
                             /> */}
@@ -182,12 +185,15 @@ const EditPaymentModal: React.FC<EditPaymentModalProps> = ({ isOpen, onClose, pa
                                 <option value="completed">Completed</option>
                                 <option value="failed">Failed</option>
                             </select> */}
-
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type="button" onClick={onClose}>Cancel</Button>
-                        <Button type="submit" disabled={loading} className="bg-primary text-white">{loading ? 'Saving...' : 'Save'}</Button>
+                        <Button type="button" onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading} className="bg-primary text-white">
+                            {loading ? 'Saving...' : 'Save'}
+                        </Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

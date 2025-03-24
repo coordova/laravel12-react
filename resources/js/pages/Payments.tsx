@@ -27,7 +27,7 @@ const Payments = ( { payments }: { payments: Payment[] } ) => {
         setData(payments);
     }, [payments]);
 
-    const handleEdit = (payment: Payment) => {
+    const handleUpdate = (payment: Payment) => {
         setData((prev) => prev.map(p => p.id === payment.id ? payment : p));
         setEditModalOpen(true);
         setSelectedPayment(payment);
@@ -43,7 +43,7 @@ const Payments = ( { payments }: { payments: Payment[] } ) => {
             <Head title="Payments" />
             <Toaster position="top-right" richColors />
             <DataTable columns={columns( () => {}, setEditModalOpen, setSelectedPayment)} data={ payments} />
-            <EditPaymentModal isOpen={editModalOpen} onClose={handleEditClose} payment={selectedPayment} onUpdate={handleEdit} />
+            <EditPaymentModal isOpen={editModalOpen} onClose={handleEditClose} payment={selectedPayment} onUpdate={handleUpdate} />
         </AppLayout>
     )
 }

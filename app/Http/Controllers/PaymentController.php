@@ -65,7 +65,7 @@ class PaymentController extends Controller
 
         $payment->update($request->all());
         // return redirect()->route('payments.index')->with('success', 'Payment updated successfully...');
-        return redirect()->json(['message' => 'Payment updated successfully...'], 200);
+        return response()->json(['message' => 'Payment updated successfully...'], 200);
     }
 
     /**
