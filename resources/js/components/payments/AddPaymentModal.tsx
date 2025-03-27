@@ -11,6 +11,7 @@ const AddPaymentModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
     const [loading, setLoading] = useState(false);
 
+    // Handle form submission
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
@@ -23,7 +24,29 @@ const AddPaymentModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
             setLoading(false);
             return;
         }
+        /* 
+        // Validate email
+        if (!email) {
+            setMessage({ type: 'error', text: 'Email is required.' });
+            setLoading(false);
+            return;
+        }
 
+        // Validate amount
+        if (!amount || amount <= 0) {
+            setMessage({ type: 'error', text: 'Amount must be a positive number.' });
+            setLoading(false);
+            return;
+        }
+
+        // Validate status
+        if (!status) {
+            setMessage({ type: 'error', text: 'Status is required.' });
+            setLoading(false);
+            return;
+        }
+ */
+        // Add payment
         try {
             const response = await fetch('/payments', {
                 method: 'POST',
